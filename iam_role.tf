@@ -52,3 +52,11 @@ resource "aws_iam_role_policy_attachment" "dms" {
   role       = aws_iam_role.dms.name
   policy_arn = aws_iam_policy.dms.arn
 }
+
+resource "aws_lambda_permission" "dms" {
+  statement_id  = "AllowExecutionFromEventBridge"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.dms_function.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.dms.arn
+}
